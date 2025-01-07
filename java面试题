@@ -1,0 +1,190 @@
+1. Java 中的 == 和 equals() 有什么区别？
+解答：
+== 用于比较 引用 是否相同，即它检查两个对象是否指向同一个内存地址。对于基本数据类型，它比较的是值是否相等。
+equals() 用于比较 对象的内容 是否相等。它是 Object 类中的一个方法，通常被重写来比较对象的内容。
+示例：
+java
+复制代码
+String str1 = new String("hello");
+String str2 = new String("hello");
+
+System.out.println(str1 == str2);         // false, 因为引用不同
+System.out.println(str1.equals(str2));    // true, 因为内容相同
+2. 什么是 Java 中的 hashCode() 和它的作用？
+解答：
+hashCode() 是 Object 类中的一个方法，它返回一个整数值，通常用于判断对象是否相等或用于对象存储到集合（如 HashMap、HashSet）中。
+hashCode() 方法的目的是尽量生成一个唯一的整数，用于加速集合中元素的查找。两个内容相同的对象必须有相同的 hashCode() 值。
+注意：
+hashCode() 并不保证对象的 唯一性。不同的对象可能有相同的 hashCode，这就是所谓的 哈希碰撞。
+equals() 和 hashCode() 必须保持一致：如果两个对象通过 equals() 比较相等，那么它们的 hashCode() 必须相等。
+示例：
+java
+复制代码
+class Person {
+    String name;
+    int age;
+    
+    @Override
+    public int hashCode() {
+        return name.hashCode() + age;  // 示例的hashCode实现
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Person person = (Person) obj;
+        return age == person.age && name.equals(person.name);
+    }
+}
+
+Person p1 = new Person("Alice", 25);
+Person p2 = new Person("Alice", 25);
+System.out.println(p1.hashCode() == p2.hashCode());  // true
+System.out.println(p1.equals(p2));  // true
+3. Java 中的 final 关键字的作用？
+解答：
+final 关键字可以修饰变量、方法和类，表示它们的值或行为不能改变。
+
+修饰变量：表示该变量的值不能改变。
+修饰方法：表示该方法不能被重写。
+修饰类：表示该类不能被继承。
+示例：
+java
+复制代码
+final int x = 10;
+x = 20;  // 编译错误，因为 x 是 final
+
+class Parent {
+    final void show() {
+        System.out.println("Parent show");
+    }
+}
+
+class Child extends Parent {
+    // void show() { }  // 编译错误，不能重写父类的 final 方法
+}
+4. 解释 Java 中的 static 关键字。
+解答：
+static 关键字用于定义类级别的成员，而不是实例级别的成员。
+
+静态变量：属于类，而不是某个对象，所有对象共享同一个静态变量。
+静态方法：属于类，可以通过类名直接调用，不需要创建实例。
+静态块：在类加载时执行一次，通常用于初始化静态资源。
+示例：
+java
+复制代码
+class MyClass {
+    static int count = 0;  // 静态变量
+
+    static void increment() {  // 静态方法
+        count++;
+    }
+}
+
+MyClass.increment();  // 直接通过类调用静态方法
+System.out.println(MyClass.count);  // 输出: 1
+5. Java 中的线程如何创建？
+解答：
+在 Java 中，可以通过两种方式创建线程：
+
+继承 Thread 类：通过重写 run() 方法来定义线程执行的任务。
+实现 Runnable 接口：实现 run() 方法，然后通过 Thread 类的构造函数将其传入。
+示例（继承 Thread 类）：
+java
+复制代码
+class MyThread extends Thread {
+    public void run() {
+        System.out.println("Thread running");
+    }
+}
+
+MyThread t = new MyThread();
+t.start();  // 启动线程
+示例（实现 Runnable 接口）：
+java
+复制代码
+class MyRunnable implements Runnable {
+    public void run() {
+        System.out.println("Runnable thread running");
+    }
+}
+
+Thread t = new Thread(new MyRunnable());
+t.start();  // 启动线程
+6. 解释 synchronized 关键字的作用。
+解答：
+synchronized 用于确保某个代码块在多线程环境中只会被一个线程执行。它可以修饰方法或代码块，用来控制对共享资源的访问。
+
+修饰方法：表示方法内的代码在同一时刻只能被一个线程执行。
+修饰代码块：允许控制对指定对象的同步，粒度更细，性能更高。
+示例：
+java
+复制代码
+class Counter {
+    private int count = 0;
+
+    // 使用 synchronized 确保线程安全
+    synchronized void increment() {
+        count++;
+    }
+    
+    synchronized int getCount() {
+        return count;
+    }
+}
+7. Java 中的 this 关键字的作用？
+解答：
+this 是 Java 中的一个引用变量，表示当前对象的引用。
+
+引用当前对象：用于在类的成员方法中访问当前对象的成员。
+区分成员变量和局部变量：当局部变量与成员变量同名时，this 用来指明成员变量。
+示例：
+java
+复制代码
+class MyClass {
+    int x;
+    
+    void setX(int x) {
+        this.x = x;  // 使用 this 区分成员变量和局部变量
+    }
+}
+8. 解释 Java 中的异常处理机制。
+解答：
+Java 使用 try-catch 块来捕获和处理异常。异常分为 受检异常 和 非受检异常：
+
+受检异常：继承自 Exception 类，必须被显式捕获或声明。
+非受检异常：继承自 RuntimeException 类，不需要捕获或声明。
+示例：
+java
+复制代码
+try {
+    int result = 10 / 0;  // 会抛出 ArithmeticException
+} catch (ArithmeticException e) {
+    System.out.println("捕获到异常: " + e);
+} finally {
+    System.out.println("无论是否发生异常，都会执行此代码");
+}
+9. Java 中的 ArrayList 和 LinkedList 有何区别？
+解答：
+ArrayList 是基于动态数组实现的，查找元素的时间复杂度是 O(1)，但是插入和删除元素的时间复杂度是 O(n)，特别是当在中间插入或删除时。
+LinkedList 是基于双向链表实现的，插入和删除元素的时间复杂度是 O(1)，但查找元素的时间复杂度是 O(n)。
+示例：
+java
+复制代码
+List<Integer> arrayList = new ArrayList<>();
+List<Integer> linkedList = new LinkedList<>();
+10. 什么是 Java 中的 volatile 关键字？
+解答：
+volatile 用来修饰变量，确保该变量在多个线程中具有可见性。即当一个线程修改了被 volatile 修饰的变量时，其他线程可以立即看到该变量的最新值。volatile 只能保证可见性，不保证原子性。
+
+示例：
+java
+复制代码
+class SharedResource {
+    private volatile boolean flag = false;
+
+    public void toggleFlag() {
+        flag = !flag;  // 修改后立即在其他线程中可见
+    }
+}
