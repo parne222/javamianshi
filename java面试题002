@@ -1,0 +1,53 @@
+题目：ArrayList 和 LinkedList 的区别
+问题描述：
+请简要解释 ArrayList 和 LinkedList 的区别，分别适用于什么样的场景？并且分别实现一个简单的操作，如添加、删除元素，查看性能差异。
+
+答案：
+1. 基本区别：
+ArrayList：
+底层是基于数组实现的。
+支持快速随机访问，时间复杂度为 O(1)。
+插入和删除元素时需要移动数组元素，时间复杂度为 O(n)（在中间插入或删除时）。
+在数组满时需要重新分配更大的数组，可能会造成性能问题。
+LinkedList：
+底层是基于双向链表实现的。
+不支持快速的随机访问，访问元素的时间复杂度为 O(n)。
+插入和删除元素时，不需要移动其他元素，只需要修改链表指针，时间复杂度为 O(1)（在已知位置的情况下）。
+插入和删除操作比 ArrayList 更加高效，但在随机访问时性能较差。
+2. 适用场景：
+ArrayList：适用于频繁进行查询操作，但插入和删除操作较少的场景。例如，遍历和查找数据较为频繁时。
+LinkedList：适用于频繁进行插入和删除操作，但查询操作较少的场景。例如，需要在数据结构的两端或中间频繁插入/删除元素时。
+3. 简单代码示例：
+import java.util.*;
+
+public class ListExample {
+    public static void main(String[] args) {
+        // 使用 ArrayList
+        List<Integer> arrayList = new ArrayList<>();
+        long startTime = System.nanoTime();
+        // 添加元素
+        for (int i = 0; i < 1000000; i++) {
+            arrayList.add(i);
+        }
+        // 删除元素
+        arrayList.remove(500000);
+        long endTime = System.nanoTime();
+        System.out.println("ArrayList Time: " + (endTime - startTime) + " ns");
+
+        // 使用 LinkedList
+        List<Integer> linkedList = new LinkedList<>();
+        startTime = System.nanoTime();
+        // 添加元素
+        for (int i = 0; i < 1000000; i++) {
+            linkedList.add(i);
+        }
+        // 删除元素
+        linkedList.remove(500000);
+        endTime = System.nanoTime();
+        System.out.println("LinkedList Time: " + (endTime - startTime) + " ns");
+    }
+}
+4. 性能差异：
+在上面的代码中，我们可以通过 System.nanoTime() 测量 ArrayList 和 LinkedList 在插入和删除元素时的时间差异。
+ArrayList：因为底层是数组，所以删除元素时需要移动大量元素，尤其是删除中间位置的元素时，会比 LinkedList 慢。
+LinkedList：删除元素时，操作的是节点链接，不需要移动其他元素，因此删除操作会比 ArrayList 更快。
