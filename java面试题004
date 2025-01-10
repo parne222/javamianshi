@@ -1,0 +1,78 @@
+题目：Java 中的 final 关键字
+问题描述：
+请简要解释 final 关键字在 Java 中的作用，包括它如何影响类、方法和变量的行为？请举例说明。
+
+答案：
+1. final 关键字的作用：
+final 关键字可以用于类、方法和变量，它们的含义有所不同：
+
+final 用于类：
+
+如果一个类被声明为 final，则该类不能被继承。
+例如，String 类和 Integer 类都是 final 类，不能再继承它们。
+final 用于方法：
+
+如果一个方法被声明为 final，则该方法不能被子类重写。
+这可以保证方法的实现不被改变，确保行为的一致性。
+final 用于变量：
+
+如果一个变量被声明为 final，则该变量的值在初始化后不能被修改。
+对于 基本类型，它的值一旦设置就不可更改。
+对于 引用类型，虽然引用本身不可变，但引用指向的对象内容是可以变的（除非该对象本身是不可变的，例如 String 类）。
+2. 详细解释：
+final 类：
+通过将类声明为 final，可以防止其他类继承它。这通常用于确保类的行为不被改变。例如，String 类的设计就要求它不可继承，以确保其不可变性。
+
+java
+复制代码
+final class MyClass {
+    // 不能被继承
+}
+
+// 编译错误，不能继承 final 类
+class MySubClass extends MyClass { }
+final 方法：
+final 方法无法被子类重写，这确保了方法的实现不被改变，避免了潜在的误用。
+
+java
+复制代码
+class Parent {
+    public final void display() {
+        System.out.println("This is a final method.");
+    }
+}
+
+class Child extends Parent {
+    // 编译错误，无法重写 final 方法
+    // public void display() {
+    //     System.out.println("Trying to override.");
+    // }
+}
+final 变量：
+
+对于 基本类型，一旦初始化后值不可改变。
+对于 引用类型，一旦初始化后，引用的地址不可改变，但引用对象的内容可以改变。
+java
+复制代码
+class Example {
+    final int x = 10;  // 基本数据类型，值不可修改
+
+    public void changeValue() {
+        // x = 20; // 编译错误，final 变量不可修改
+    }
+
+    final StringBuilder sb = new StringBuilder("Hello");
+    
+    public void modifyObject() {
+        sb.append(", World!");  // 引用指向的对象内容是可变的
+        System.out.println(sb);  // 输出 "Hello, World!"
+    }
+}
+3. 总结：
+final 类：防止类被继承，保证类的设计不被改变。
+final 方法：防止方法被子类重写，保证方法的行为不被修改。
+final 变量：保证变量在初始化后不可修改（对于引用类型，保证引用不变，但对象内容可以变）。
+4. 应用场景：
+final 类：用于设计不希望被继承的类（例如，String、Integer 等）。
+final 方法：用于确保方法的实现不能被改变，通常用于确保类的行为不被篡改。
+final 变量：用于确保常量的值不被改变，常用于定义 常量（例如，static final 常量）。
