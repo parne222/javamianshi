@@ -1,0 +1,138 @@
+题目：什么是 Java 中的内部类？请举例说明如何使用内部类。
+答案：
+1. 什么是内部类？
+在 Java 中，内部类（Inner Class）是定义在另一个类内部的类。内部类可以访问其外部类的成员（包括私有成员）。Java 支持多种类型的内部类，它们提供了更好的封装性和更简洁的代码。
+
+Java 中的内部类有以下几种类型：
+
+成员内部类（Non-static Inner Class）
+静态内部类（Static Nested Class）
+局部内部类（Local Inner Class）
+匿名内部类（Anonymous Inner Class）
+2. 成员内部类（Non-static Inner Class）
+成员内部类是定义在外部类的成员位置的类，它可以访问外部类的所有成员，包括私有成员。
+
+示例：
+
+java
+复制代码
+class OuterClass {
+    private String outerField = "Outer field";
+
+    // 成员内部类
+    class InnerClass {
+        public void print() {
+            System.out.println("Accessing from InnerClass: " + outerField);
+        }
+    }
+
+    public void createInner() {
+        InnerClass inner = new InnerClass();
+        inner.print(); // 内部类可以访问外部类的成员
+    }
+}
+
+public class InnerClassExample {
+    public static void main(String[] args) {
+        OuterClass outer = new OuterClass();
+        outer.createInner(); // 创建并使用内部类
+    }
+}
+说明：
+
+内部类 InnerClass 可以访问外部类 OuterClass 的成员（包括 private 成员）。
+内部类的实例必须与外部类的实例关联起来，所以我们必须先创建外部类的实例，再创建内部类的实例。
+3. 静态内部类（Static Nested Class）
+静态内部类是用 static 修饰的内部类，它不依赖于外部类的实例。静态内部类不能访问外部类的非静态成员，只能访问外部类的静态成员。
+
+示例：
+
+java
+复制代码
+class OuterClass {
+    private static String staticField = "Static field";
+
+    // 静态内部类
+    static class StaticInnerClass {
+        public void print() {
+            System.out.println("Accessing from StaticInnerClass: " + staticField);
+        }
+    }
+}
+
+public class StaticInnerClassExample {
+    public static void main(String[] args) {
+        OuterClass.StaticInnerClass inner = new OuterClass.StaticInnerClass();
+        inner.print(); // 可以直接创建静态内部类的实例
+    }
+}
+说明：
+
+静态内部类不需要外部类的实例，因此可以直接创建静态内部类的实例。
+它只能访问外部类的静态成员。
+4. 局部内部类（Local Inner Class）
+局部内部类是在方法内部定义的类，它只在方法内部有效。局部内部类可以访问方法中的局部变量（前提是这些变量必须是 final 或者有效最终变量）。
+
+示例：
+
+java
+复制代码
+class OuterClass {
+    public void outerMethod() {
+        final String localVar = "Local variable";
+        
+        // 局部内部类
+        class LocalInnerClass {
+            public void print() {
+                System.out.println("Accessing from LocalInnerClass: " + localVar);
+            }
+        }
+        
+        LocalInnerClass inner = new LocalInnerClass();
+        inner.print(); // 局部内部类只能在方法内部使用
+    }
+}
+
+public class LocalInnerClassExample {
+    public static void main(String[] args) {
+        OuterClass outer = new OuterClass();
+        outer.outerMethod(); // 调用外部类的方法
+    }
+}
+说明：
+
+局部内部类只能在方法内部使用，它不能在方法外部创建实例。
+它可以访问方法的 final 或有效最终变量。
+5. 匿名内部类（Anonymous Inner Class）
+匿名内部类是没有名字的类，它是用来快速实现接口或继承类的一个特例。匿名内部类的实例是在声明时立即创建的。
+
+示例：
+
+java
+复制代码
+interface Greeting {
+    void greet();
+}
+
+public class AnonymousInnerClassExample {
+    public static void main(String[] args) {
+        // 匿名内部类实现接口
+        Greeting greeting = new Greeting() {
+            @Override
+            public void greet() {
+                System.out.println("Hello from Anonymous Inner Class!");
+            }
+        };
+
+        greeting.greet(); // 调用匿名内部类的方法
+    }
+}
+说明：
+
+匿名内部类没有名字，通常用于实现接口或者继承类的快速实现。
+它是在定义的同时立即创建实例。
+6. 总结
+成员内部类：定义在外部类的成员位置，可以访问外部类的所有成员。
+静态内部类：定义为 static，不依赖于外部类的实例，仅能访问外部类的静态成员。
+局部内部类：定义在方法内部，只在该方法内有效，可以访问方法中的 final 或有效最终变量。
+匿名内部类：没有名字的内部类，通常用于实现接口或继承类的快速实现。
