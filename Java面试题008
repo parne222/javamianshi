@@ -1,0 +1,107 @@
+题目：什么是 Java 中的多态？如何实现多态？
+答案：
+1. 什么是多态？
+多态（Polymorphism） 是面向对象编程的重要特性之一，指同一个方法调用在不同对象上表现出不同的行为。多态可以提高代码的灵活性和可扩展性。
+
+Java 中的多态有两种主要形式：
+
+编译时多态（静态多态）：通过方法重载实现。
+运行时多态（动态多态）：通过方法重写和父类引用指向子类对象实现。
+2. 多态的实现方式
+（1）方法重载（Method Overloading） - 编译时多态
+
+定义：在同一个类中定义多个同名方法，但参数列表（参数数量、类型或顺序）不同。
+特点：
+方法名相同。
+参数列表必须不同。
+与返回值类型无关。
+在编译时就可以决定调用哪个方法。
+代码示例：
+
+java
+复制代码
+class OverloadingExample {
+    public void print(int num) {
+        System.out.println("Printing an integer: " + num);
+    }
+
+    public void print(String text) {
+        System.out.println("Printing a string: " + text);
+    }
+
+    public void print(int num, String text) {
+        System.out.println("Printing an integer and a string: " + num + ", " + text);
+    }
+
+    public static void main(String[] args) {
+        OverloadingExample example = new OverloadingExample();
+        example.print(10);                 // 调用第一个方法
+        example.print("Hello, Java!");     // 调用第二个方法
+        example.print(20, "Overloading"); // 调用第三个方法
+    }
+}
+输出：
+
+php
+复制代码
+Printing an integer: 10
+Printing a string: Hello, Java!
+Printing an integer and a string: 20, Overloading
+（2）方法重写（Method Overriding） - 运行时多态
+
+定义：子类重新定义父类中继承的方法。
+特点：
+方法名、参数列表必须相同。
+返回类型可以是相同或协变类型（子类类型）。
+子类方法的访问修饰符不能比父类方法更严格。
+必须通过父类的引用调用子类的实现。
+代码示例：
+
+java
+复制代码
+class Animal {
+    public void makeSound() {
+        System.out.println("Animal makes a sound");
+    }
+}
+
+class Dog extends Animal {
+    @Override
+    public void makeSound() {
+        System.out.println("Dog barks");
+    }
+}
+
+class Cat extends Animal {
+    @Override
+    public void makeSound() {
+        System.out.println("Cat meows");
+    }
+}
+
+public class OverridingExample {
+    public static void main(String[] args) {
+        Animal animal1 = new Dog(); // 父类引用指向子类对象
+        Animal animal2 = new Cat();
+
+        animal1.makeSound(); // 调用子类 Dog 的方法
+        animal2.makeSound(); // 调用子类 Cat 的方法
+    }
+}
+输出：
+
+复制代码
+Dog barks
+Cat meows
+3. 多态的优点
+代码复用：通过父类引用调用子类方法，可以减少重复代码。
+灵活性和可扩展性：新增子类时，无需修改父类代码即可直接使用多态。
+模块化：程序设计更清晰，易于维护。
+4. 多态的注意事项
+静态方法不能被重写，因为它们属于类，而不是实例。
+构造方法不能被重写，但可以被重载。
+final 方法不能被重写，但可以被继承。
+5. 总结
+编译时多态（静态多态）：通过方法重载实现，在编译时决定调用哪个方法。
+运行时多态（动态多态）：通过方法重写实现，在运行时决定调用哪个方法。
+多态的核心是 “一个接口，多种实现”，使得代码更具灵活性和扩展性。
