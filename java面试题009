@@ -1,0 +1,99 @@
+题目：解释 hashCode() 和 equals() 方法的关系以及它们在 Java 中的使用。
+答案：
+1. hashCode() 和 equals() 的关系
+在 Java 中，hashCode() 和 equals() 是用于对象比较和哈希表操作（如 HashMap、HashSet 等）的两个非常重要的方法。它们的关系主要体现在以下几个方面：
+
+hashCode()：是一个整数，表示对象的哈希值。它用于哈希算法中，以便高效存储和查找对象。在 Java 集合框架中，哈希表结构（如 HashMap、HashSet 等）使用 hashCode() 方法来确定对象的位置。
+
+equals()：用于比较两个对象的内容是否相同。默认情况下，equals() 方法比较的是对象的引用地址（即是否指向同一个对象），但通常我们会重写 equals() 方法以进行对象内容的比较。
+
+2. hashCode() 和 equals() 的规则
+在 Java 中，hashCode() 和 equals() 方法必须遵循以下规则，确保它们的正确使用：
+
+规则 1：如果两个对象相等（equals() 返回 true），则它们的哈希码必须相同。
+
+也就是说，如果 a.equals(b) 返回 true，那么 a.hashCode() 和 b.hashCode() 必须返回相同的值。
+规则 2：如果两个对象的哈希码相同，equals() 方法不一定返回 true。
+
+即使两个对象的哈希码相同，也不能保证它们的内容相同（哈希冲突）。
+规则 3：如果两个对象的哈希码不同，那么 equals() 必须返回 false。
+
+如果 a.hashCode() != b.hashCode()，那么 a.equals(b) 必须返回 false。
+这些规则确保了哈希表的正确行为，使得基于哈希值的集合（如 HashMap 和 HashSet）可以正确工作。
+
+3. hashCode() 和 equals() 的默认实现
+hashCode()：在 Object 类中，hashCode() 方法返回的是对象的内存地址的整数值，通常是由 JVM 生成的一个不唯一的值。
+
+equals()：在 Object 类中，equals() 方法默认比较的是对象的内存地址，即 == 运算符所做的比较。
+
+4. 重写 hashCode() 和 equals() 方法的原因
+如果我们要在自定义的类中使用对象作为集合（如 HashSet 或 HashMap）的键，我们必须重写 hashCode() 和 equals() 方法，以确保集合操作的正确性。例如，当我们将对象作为键放入 HashMap 时，hashCode() 决定了对象存储的位置，而 equals() 决定了键是否相等。
+
+5. 代码示例：重写 hashCode() 和 equals() 方法
+java
+复制代码
+import java.util.Objects;
+
+class Person {
+    private String name;
+    private int age;
+
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    // 重写 equals 方法
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true; // 同一个对象
+        if (obj == null || getClass() != obj.getClass()) return false; // 类型不匹配
+        Person person = (Person) obj;
+        return age == person.age && Objects.equals(name, person.name); // 比较内容
+    }
+
+    // 重写 hashCode 方法
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, age); // 通过 name 和 age 计算哈希值
+    }
+
+    @Override
+    public String toString() {
+        return "Person{name='" + name + "', age=" + age + "}";
+    }
+}
+
+public class HashCodeEqualsExample {
+    public static void main(String[] args) {
+        Person p1 = new Person("Alice", 30);
+        Person p2 = new Person("Alice", 30);
+        Person p3 = new Person("Bob", 25);
+
+        System.out.println(p1.equals(p2)); // true, 内容相同
+        System.out.println(p1.equals(p3)); // false, 内容不同
+
+        System.out.println(p1.hashCode()); // p1 的哈希值
+        System.out.println(p2.hashCode()); // p2 的哈希值
+        System.out.println(p3.hashCode()); // p3 的哈希值
+    }
+}
+输出：
+
+arduino
+复制代码
+true
+false
+2574064
+2574064
+8000278
+解释：
+
+p1.equals(p2) 返回 true，因为 name 和 age 都相同。
+p1.hashCode() 和 p2.hashCode() 返回相同的哈希值，因为 hashCode() 是基于 name 和 age 计算的。
+p1.equals(p3) 返回 false，因为 name 和 age 不同。
+6. 总结
+hashCode() 用于返回对象的哈希值，通常用于哈希表中的存储和查找。
+equals() 用于比较对象是否相等，通常用于集合中元素的查找和去重。
+在使用自定义对象作为哈希表的键时，必须重写这两个方法，确保集合操作的正确性。
+需要遵守 hashCode() 和 equals() 方法的相关规则，确保它们的一致性和正确性。
