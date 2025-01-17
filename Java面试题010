@@ -1,0 +1,32 @@
+Java 中 == 和 equals() 方法的区别是什么？
+
+答案：
+在 Java 中，== 和 equals() 都用于比较对象，但它们的行为有所不同：
+
+== 运算符：
+
+== 用于比较两个对象的内存地址（即对象的引用），判断它们是否指向同一个内存地址。
+对于基本数据类型，== 比较的是值。
+示例：
+java
+复制
+编辑
+String s1 = new String("hello");
+String s2 = new String("hello");
+System.out.println(s1 == s2);  // 输出 false
+虽然 s1 和 s2 内容相同，但它们指向的是不同的内存地址，所以结果是 false。
+equals() 方法：
+
+equals() 方法用于比较对象的内容。它是 Object 类的一个方法，通常会被子类重写以比较对象的实际内容。
+对于 String 类型来说，equals() 方法会比较字符串的内容，而不是引用。
+示例：
+java
+复制
+编辑
+String s1 = new String("hello");
+String s2 = new String("hello");
+System.out.println(s1.equals(s2));  // 输出 true
+因为 equals() 比较的是字符串的内容，所以输出 true。
+总结：
+== 比较的是对象的引用地址。
+equals() 比较的是对象的内容（具体实现取决于子类的重写，String 类有重写）。
