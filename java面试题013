@@ -1,0 +1,120 @@
+题目：Java 中的 final 关键字有哪些用法？
+答案：
+1. final 关键字的作用
+final 是 Java 中的一个修饰符，可以用于修饰 变量、方法 和 类，其含义是“不可改变”或“不可被重写”。
+
+2. final 的用法
+（1）修饰变量
+表示变量的值一旦被初始化后，就不能再被修改。
+
+对于基本数据类型：值不可改变。
+对于引用数据类型：引用地址不可变，但引用的对象内容可以修改。
+代码示例：
+
+java
+复制
+编辑
+public class FinalVariableExample {
+    public static void main(String[] args) {
+        final int x = 10;
+        // x = 20; // 编译错误：final 变量的值不能修改
+
+        final Person person = new Person("Alice");
+        person.setName("Bob"); // 可以修改对象内容
+        // person = new Person("Charlie"); // 编译错误：final 引用不能指向新的对象
+    }
+}
+
+class Person {
+    private String name;
+
+    public Person(String name) {
+        this.name = name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+}
+（2）修饰方法
+表示该方法不能被子类重写，但可以被子类继承使用。
+
+代码示例：
+
+java
+复制
+编辑
+class Parent {
+    public final void display() {
+        System.out.println("This is a final method in the Parent class.");
+    }
+}
+
+class Child extends Parent {
+    // @Override
+    // public void display() {
+    //     // 编译错误：final 方法不能被重写
+    // }
+}
+（3）修饰类
+表示该类不能被继承，通常用于设计不可扩展的工具类（如 java.lang.String）。
+
+代码示例：
+
+java
+复制
+编辑
+public final class Utility {
+    public static void printMessage() {
+        System.out.println("This is a utility class.");
+    }
+}
+
+// class ExtendedUtility extends Utility { // 编译错误：final 类不能被继承
+// }
+3. final 的注意事项
+final 修饰局部变量：
+
+局部变量必须在声明时或第一次使用前初始化，之后不能再修改。
+final 修饰成员变量：
+
+如果是实例变量，可以通过构造器初始化。
+如果是静态变量，可以在声明时或静态代码块中初始化。
+final 和 abstract 不能同时使用：
+
+因为 abstract 表示需要子类实现，而 final 表示不可被重写，两者矛盾。
+final 修饰方法参数：
+
+方法参数被 final 修饰后，在方法内部不能修改其引用或值。
+代码示例：
+
+java
+复制
+编辑
+public class FinalParameterExample {
+    public void display(final int x) {
+        // x = x + 1; // 编译错误：final 参数不能被修改
+        System.out.println("Value of x: " + x);
+    }
+}
+4. 实际应用场景
+安全性：
+
+防止类被继承（如工具类、敏感类）。
+防止方法被修改（如模板方法模式中的固定逻辑）。
+性能优化：
+
+JVM 会对 final 修饰的变量进行优化，因为它们不可变。
+设计不可变类：
+
+使用 final 修饰类、变量和方法，确保类的不可变性（如 String 类）。
+5. 总结
+修饰对象	含义
+变量	值不可更改（基本类型值固定，引用类型地址固定）。
+方法	方法不能被子类重写，但可以被继承使用。
+类	类不能被继承。
+final 是 Java 中非常重要的关键字，能够提高程序的安全性、可维护性以及性能，是常见的面试考点。
