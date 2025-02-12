@@ -1,0 +1,67 @@
+什么是 Java 中的 hashCode() 方法？equals() 和 hashCode() 方法之间有什么关系？
+
+答案：
+hashCode() 方法：
+
+hashCode() 是 Object 类中的一个方法。它返回一个整数值，通常用于对象在哈希表（如 HashMap, HashSet）中的存储和检索。哈希值用于决定对象在哈希表中的位置。
+
+默认实现：Object 类中的 hashCode() 返回的是对象的内存地址（经过一定的转换），所以不同的对象通常会有不同的哈希值。
+
+equals() 方法：
+
+equals() 是 Object 类中的另一个方法，用于比较两个对象的“相等性”。默认实现是通过比较对象的内存地址是否相同来判断对象是否相等。
+
+在多数情况下，equals() 会被重写，以便比较对象的内容而不是引用。
+
+equals() 和 hashCode() 的关系：
+
+对称性： 如果两个对象通过 equals() 比较是相等的，那么它们的 hashCode() 方法必须返回相同的值。
+
+不等式： 如果两个对象的 hashCode() 不相等，它们的 equals() 方法一定是返回 false。但是，equals() 返回 false 的对象，它们的 hashCode() 可以相同（这称为哈希碰撞）。
+
+重写时的注意事项：
+
+当你重写 equals() 方法时，通常也应该重写 hashCode() 方法，确保两个相等的对象有相同的哈希值。
+如果不遵循这个规则，哈希表（如 HashMap）的行为可能会不正确，导致查找、删除、插入等操作出错。
+代码示例：
+java
+复制
+编辑
+import java.util.Objects;
+
+class Person {
+    private String name;
+    private int age;
+
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Person person = (Person) o;
+        return age == person.age && Objects.equals(name, person.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, age);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Person person1 = new Person("Alice", 30);
+        Person person2 = new Person("Alice", 30);
+
+        System.out.println(person1.equals(person2));  // true
+        System.out.println(person1.hashCode() == person2.hashCode());  // true
+    }
+}
+解析：
+在这个示例中，Person 类重写了 equals() 和 hashCode() 方法。equals() 用于比较 name 和 age 是否相等，hashCode() 结合 name 和 age 来生成哈希值。这样保证了如果两个 Person 对象相等，它们的 hashCode() 也相同。
+
+这种方法保证了在使用哈希表（如 HashMap 或 HashSet）时，两个内容相同的对象会被正确地处理。
