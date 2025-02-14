@@ -1,0 +1,82 @@
+题目：
+Java 中的 final 关键字有什么作用？请分别举例说明它在不同场景下的使用。
+
+答案：
+final 关键字在 Java 中有多种用途，主要用于限制修改对象的状态或结构。具体来说，final 可以修饰类、方法和变量。
+
+1. final 修饰类：
+final 用于修饰类时，表示该类不能被继承。例如：
+
+java
+复制
+编辑
+final class MyClass {
+    // 类的内容
+}
+
+// 编译时错误，不能继承 final 类
+class SubClass extends MyClass {
+}
+解释：
+当类被声明为 final 时，不能有子类继承它。这通常用于确保该类的实现不被修改或者不允许继承扩展。
+
+2. final 修饰方法：
+final 用于修饰方法时，表示该方法不能被子类重写。例如：
+
+java
+复制
+编辑
+class MyClass {
+    public final void myMethod() {
+        System.out.println("This is a final method.");
+    }
+}
+
+class SubClass extends MyClass {
+    // 编译时错误，不能重写 final 方法
+    @Override
+    public void myMethod() {
+        System.out.println("Trying to override.");
+    }
+}
+解释：
+当一个方法被声明为 final 时，子类不能重写（override）这个方法。通常这样做是为了确保该方法的实现不会被修改，保持其原始行为。
+
+3. final 修饰变量：
+final 用于修饰变量时，表示该变量的值不能被改变。一旦赋值后，final 变量就成为常量。例如：
+
+java
+复制
+编辑
+class MyClass {
+    public static final int MAX_VALUE = 100;
+
+    public void example() {
+        // 编译时错误，不能改变 final 变量的值
+        MAX_VALUE = 200;  
+    }
+}
+解释：
+
+如果 final 修饰实例变量，则表示该变量在对象初始化后不可更改。
+如果 final 修饰类变量（静态变量），则该变量在类加载时只能赋值一次，且不能改变。
+4. final 修饰方法参数：
+final 可以修饰方法参数，表示该参数在方法内部的值不可改变。例如：
+
+java
+复制
+编辑
+public void printName(final String name) {
+    // 编译时错误，不能修改 final 参数的值
+    name = "John Doe";
+    System.out.println(name);
+}
+解释：
+final 修饰方法参数时，表示该参数在方法内不能重新赋值，这有助于保证方法中参数的不可变性。
+
+总结：
+类：final 类不能被继承。
+方法：final 方法不能被重写。
+变量：final 变量的值不可修改，常用于常量。
+参数：final 参数不能被修改。
+使用 final 关键字有助于保证程序的稳定性和一致性，特别是在设计不可变对象或不可修改的功能时。
